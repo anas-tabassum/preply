@@ -12,20 +12,25 @@ const NavBar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/login" className={styles.navLink}>
-              Login
+            <Link to="/event_category" className={styles.navLink}>
+              Event Category
             </Link>
           </li>
           <li>
-            <Link to="/signup" className={styles.navLink}>
-              Signup
+            <Link to="/services" className={styles.navLink}>
+              services
             </Link>
           </li>
           <li>
+            <Link to="/gallery" className={styles.navLink}>
+              Gallery
+            </Link>
+          </li>
+          {/* <li>
             <Link to="/logout" className={styles.navLink}>
               Logout
             </Link>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </div>
