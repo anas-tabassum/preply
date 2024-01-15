@@ -3,8 +3,8 @@ import styles from "../styles/Singup.module.css";
 import NavBar from "./NavBar.jsx";
 
 const Signup = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -20,18 +20,32 @@ const Signup = () => {
       setError(false);
     }
     let obj = {
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       email,
       password,
     };
-    console.log(obj);
 
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
+    fetch("http://localhost:4000/user", {
+      method: "post",
+      body: JSON.stringify(obj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+          alert("User added successfully");
+        } else {
+          alert("Something went wrong");
+        }
+      });
   };
 
   return (
@@ -43,7 +57,7 @@ const Signup = () => {
             <label>First Name:</label>
             <input
               type="text"
-              value={firstName}
+              value={firstname}
               onChange={(e) => setFirstName(e.target.value)}
               className={styles.input}
             />
@@ -52,7 +66,7 @@ const Signup = () => {
             <label>Last Name:</label>
             <input
               type="text"
-              value={lastName}
+              value={lastname}
               onChange={(e) => setLastName(e.target.value)}
               className={styles.input}
             />

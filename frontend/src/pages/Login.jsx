@@ -6,17 +6,31 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const handleSubmit = () => {
     let obj = {
       email,
       password,
     };
 
-    console.log(obj);
-    setPassword("");
-    setEmail("");
+    fetch("http://localhost:4000/login", {
+      method: "post",
+      body: JSON.stringify(obj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success === true) {
+          setPassword("");
+          setEmail("");
+          localStorage.setItem("token", data.token);
+          alert("User logged in");
+        } else {
+          alert("Something went wrong");
+        }
+        console.log(data);
+      });
   };
 
   return (
@@ -24,7 +38,7 @@ const Login = () => {
       <div className={styles.container}>
         <h2>Login</h2>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.form}>
           <div className={styles.formGroup}>
             <label>Email</label>
             <input
@@ -43,8 +57,10 @@ const Login = () => {
               className={styles.input}
             />
           </div>
-          <button className={styles.button}>Login</button>
-        </form>
+          <button className={styles.button} onClick={handleSubmit}>
+            Login
+          </button>
+        </div>
       </div>
     </div>
   );
