@@ -17,7 +17,6 @@ const loginHandler = async (data, res) => {
     const secretKey = "Anonymous";
 
     const payload = {
-      sub: response._id,
       email: response.email,
     };
 

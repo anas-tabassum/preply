@@ -1,29 +1,30 @@
 const express = require("express");
 const cors = require("cors");
 const userController = require("./controllers/userController");
+const eventController = require("./controllers/eventController");
 const app = express();
-
+const jwt = require("jsonwebtoken");
 app.use(cors());
 app.use(express.json());
 
 function validateToken(req, res, next) {
   const secretKey = "Anonymous";
-  const token = req.header("Authorization");
-
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: "Token is invalid." });
-  }
+  const token = req.headers.authorization;
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Unauthorized: Invalid token" });
+    } else {
+      console.log("Your token is valid");
+      next();
+    }
+  });
 }
 
 app.get("/", (req, res) => {
   res.send("<h1>Node server running</h1>");
 });
 
-app.post("/user", (req, res) => {
+app.post("/signup", (req, res) => {
   const data = req.body;
   userController.userHandler(data, res);
 });
@@ -33,9 +34,9 @@ app.post("/login", (req, res) => {
   userController.loginHandler(data, res);
 });
 
-app.post("/event", (req, res) => {
+app.post("/event", validateToken, (req, res) => {
   const data = req.body;
-  userController.loginHandler(data, res);
+  eventController.eventAdd(data, res);
 });
 
 app.listen(4000);

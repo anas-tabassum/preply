@@ -1,3 +1,13 @@
-const eventHandler = () => {};
+const model = require("../models/eventModel");
 
-module.exports = eventHandler;
+const eventAdd = async (data, res) => {
+  const response = await model.eventModel(data);
+
+  if (response) {
+    res.json({ message: "Event added successfully", status: "success" });
+  } else {
+    res.json({ message: "Fail to add Event" });
+  }
+};
+
+module.exports = { eventAdd };
